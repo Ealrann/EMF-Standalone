@@ -1,0 +1,5 @@
+rootProject.name = "EMF-Standalone"
+
+
+include ':org.eclipse.emf.common'
+include ':org.eclipse.emf.ecore'
