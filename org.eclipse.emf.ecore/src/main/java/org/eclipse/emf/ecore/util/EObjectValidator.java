@@ -176,7 +176,7 @@ public class EObjectValidator implements EValidator
       }
     }
 
-    return EValidator.ValidationDelegate.Registry.INSTANCE;
+    return null;
   }
 
   /**
