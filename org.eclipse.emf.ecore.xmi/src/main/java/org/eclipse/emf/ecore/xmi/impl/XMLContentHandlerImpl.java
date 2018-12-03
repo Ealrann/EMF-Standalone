@@ -290,20 +290,5 @@ public class XMLContentHandlerImpl extends ContentHandlerImpl
       }
       return result;
     }
-
-    /**
-     * A describer that {@link #createContentHandler(Map) creates} an {@link XMI} instance.
-     */
-    public static class Describer extends ContentHandlerImpl.Describer
-    {
-      /**
-       * Creates a {@link RootXMLContentHandlerImpl} instance.
-       */
-      @Override
-      protected ContentHandler createContentHandler(Map<String, String> parameters)
-      {
-        return new XMI();
-      }
-    }
   }
 }

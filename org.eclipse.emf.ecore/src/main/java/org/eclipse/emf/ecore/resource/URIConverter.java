@@ -22,9 +22,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
-import java.net.SocketTimeoutException;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -264,7 +262,7 @@ public interface URIConverter
     
     public static String getEncoding(String xmlString)
     {
-      Matcher matcher = XML_HEADER.matcher(xmlString);
+      final Matcher matcher = XML_HEADER.matcher(xmlString);
       return
         matcher.lookingAt() ?
           matcher.group(1) :
@@ -279,11 +277,11 @@ public interface URIConverter
       try
       {
         xmlReader.mark(100);
-        char [] buffer = new char[100];
-        int length = xmlReader.read(buffer);
+        final char [] buffer = new char[100];
+        final int length = xmlReader.read(buffer);
         if (length > -1)
         {
-          Matcher matcher = XML_HEADER.matcher(new String(buffer, 0, length));
+          final Matcher matcher = XML_HEADER.matcher(new String(buffer, 0, length));
           return
             matcher.lookingAt() ?
               matcher.group(1) :
@@ -294,7 +292,7 @@ public interface URIConverter
           return null;
         }
       }
-      catch (IOException exception)
+      catch (final IOException exception)
       {
         return null;
       }
@@ -304,7 +302,7 @@ public interface URIConverter
         {
           xmlReader.reset();
         }
-        catch (IOException exception)
+        catch (final IOException exception)
         {
           // Ignore.
         }
@@ -353,12 +351,14 @@ public interface URIConverter
       return buffer.read();
     }
 
-    public Reader asReader()
+    @Override
+	public Reader asReader()
     {
       return reader;
     }
     
-    public String getEncoding()
+    @Override
+	public String getEncoding()
     {
       return encoding; 
     }
@@ -401,7 +401,7 @@ public interface URIConverter
           index = 0;
           reset();
           
-          int readCount = reader.read(characters);
+          final int readCount = reader.read(characters);
           if (readCount < 0)
           {
             return -1;
@@ -505,12 +505,14 @@ public interface URIConverter
       buffer.write(b);
     }
 
-    public Writer asWriter()
+    @Override
+	public Writer asWriter()
     {
       return writer;
     }
 
-    public String getEncoding()
+    @Override
+	public String getEncoding()
     {
       return encoding;
     }
@@ -551,7 +553,7 @@ public interface URIConverter
         }
         else
         {
-          int readCount = reader.read(characters);
+          final int readCount = reader.read(characters);
           if (readCount > 0)
           {
             writer.write(characters, 0, readCount);
@@ -565,7 +567,7 @@ public interface URIConverter
       
       public void flush() throws IOException
       {
-        int readCount = reader.read(characters);
+        final int readCount = reader.read(characters);
         if (readCount > 0)
         {
           writer.write(characters, 0, readCount);

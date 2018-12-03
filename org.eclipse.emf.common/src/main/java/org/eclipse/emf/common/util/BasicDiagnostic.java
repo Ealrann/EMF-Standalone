@@ -10,13 +10,8 @@
  */
 package org.eclipse.emf.common.util;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.eclipse.core.runtime.IStatus;
-
-import org.eclipse.emf.common.EMFPlugin;
 
 
 /**
@@ -295,219 +290,6 @@ public class BasicDiagnostic implements Diagnostic, DiagnosticChain
     return result.toString();
   }  
 
-  private static class StatusWrapper implements IStatus
-  {
-    protected static final IStatus [] EMPTY_CHILDREN = new IStatus [0];
-
-    protected Throwable throwable;
-    protected Diagnostic diagnostic;
-    protected IStatus [] wrappedChildren;
-
-    public StatusWrapper(Diagnostic diagnostic)
-    {
-      this.diagnostic = diagnostic;
-    }
-    
-    public StatusWrapper(DiagnosticException diagnosticException)
-    {
-      throwable = diagnosticException;
-      diagnostic = diagnosticException.getDiagnostic();
-    }
-
-    public IStatus[] getChildren()
-    {
-      if (wrappedChildren == null)
-      {
-        List<Diagnostic> children = diagnostic.getChildren();
-        if (children.isEmpty())
-        {
-          wrappedChildren = EMPTY_CHILDREN;
-        }
-        else
-        {
-          wrappedChildren = new IStatus [children.size()];
-          for (int i = 0; i < wrappedChildren.length; ++i)
-          {
-            wrappedChildren[i] = toIStatus(children.get(i));
-          }
-        }
-      }
-      return wrappedChildren;
-    }
-    
-    public int getCode()
-    {
-      return diagnostic.getCode();
-    }
-    
-    public Throwable getException()
-    {
-      return throwable != null ? throwable : diagnostic.getException();
-    }
-    
-    public String getMessage()
-    {
-      return diagnostic.getMessage();
-    }
-    
-    public String getPlugin()
-    {
-      return diagnostic.getSource();
-    }
-    
-    public int getSeverity()
-    {
-      return diagnostic.getSeverity();
-    }
-    
-    public boolean isMultiStatus()
-    {
-      return !diagnostic.getChildren().isEmpty();
-    }
-    
-    public boolean isOK()
-    {
-      return diagnostic.getSeverity() == OK;
-    }
-    
-    public boolean matches(int severityMask)
-    {
-      return (diagnostic.getSeverity() & severityMask ) != 0;
-    }
-
-    @Override
-    public String toString()
-    {
-      return diagnostic.toString();
-    }
-
-    public static IStatus convert(Diagnostic diagnostic)
-    {
-      return 
-        diagnostic instanceof DiagnosticWrapper ?
-          ((DiagnosticWrapper)diagnostic).status :
-          new StatusWrapper(diagnostic);
-    }
-
-    public static IStatus create(DiagnosticException diagnosticException)
-    {
-      return new StatusWrapper(diagnosticException);
-    }
-  }
-
-  /**
-   * Returns the diagnostic viewed as an {@link IStatus}.
-   */
-  public static IStatus toIStatus(Diagnostic diagnostic)
-  {
-    return StatusWrapper.convert(diagnostic);
-  }
-
-  /**
-   * Returns the diagnostic exception viewed as an {@link IStatus}.
-   */
-  public static IStatus toIStatus(DiagnosticException diagnosticException)
-  {
-    return StatusWrapper.create(diagnosticException);
-  }
-  
-  private static class DiagnosticWrapper implements Diagnostic
-  {
-    protected IStatus status;
-    protected List<Diagnostic> wrappedChildren;
-    protected List<Diagnostic> unmodifiableWrappedChildren;
-    protected List<Object> data;
-
-    public DiagnosticWrapper(IStatus status)
-    {
-      this.status = status;
-    }
-    
-    public int getCode()
-    {
-      return status.getCode();
-    }
-
-    public String getMessage()
-    {
-      return status.getMessage();
-    }
-
-    public int getSeverity()
-    {
-      return status.getSeverity();
-    }
-
-    public String getSource()
-    {
-      return status.getPlugin();
-    }
-    
-    public Throwable getException()
-    {
-      return status.getException();
-    }
-
-    public List<Diagnostic> basicGetChildren()
-    {
-      if (wrappedChildren == null)
-      {
-        IStatus[] children = status.getChildren();
-        if (children.length == 0)
-        {
-          wrappedChildren = new ArrayList<Diagnostic>();
-        }
-        else
-        {
-          wrappedChildren = new ArrayList<Diagnostic>(children.length);
-          for (IStatus child : children)
-          {
-            wrappedChildren.add(toDiagnostic(child));
-          }
-        }
-      }
-      return wrappedChildren;      
-    }
-
-    public List<Diagnostic> getChildren()
-    {
-      if (unmodifiableWrappedChildren == null)
-      {
-        unmodifiableWrappedChildren = Collections.unmodifiableList(basicGetChildren());
-      }
-      return unmodifiableWrappedChildren;
-    }
-
-    public List<?> getData()
-    {
-      if (data == null)
-      {
-        List<Object> list = new ArrayList<Object>(2);
-        Throwable exception = getException();
-        if (exception != null)
-        {
-          list.add(exception);
-        }
-        list.add(status);
-        data = Collections.unmodifiableList(list);
-      }
-      return data;
-    }
-
-    public static Diagnostic convert(IStatus status)
-    {
-      return 
-        status instanceof StatusWrapper ?
-          ((StatusWrapper)status).diagnostic :
-          new DiagnosticWrapper(status);
-    }
-  }
-  
-  public static Diagnostic toDiagnostic(IStatus status)
-  {
-    return DiagnosticWrapper.convert(status);
-  }
-
   /**
    * Returns the throwable viewed as a {@link Diagnostic}.
    * 
@@ -523,15 +305,6 @@ public class BasicDiagnostic implements Diagnostic, DiagnosticChain
     else if (throwable instanceof WrappedException)
     {
       return toDiagnostic(throwable.getCause());
-    }
-    
-    if (EMFPlugin.IS_ECLIPSE_RUNNING)
-    {
-      Diagnostic diagnostic = EclipseHelper.toDiagnostic(throwable);
-      if (diagnostic != null)
-      {
-        return diagnostic;
-      }
     }
     
     String message = throwable.getClass().getName();
@@ -560,24 +333,5 @@ public class BasicDiagnostic implements Diagnostic, DiagnosticChain
     }
     
     return basicDiagnostic;
-  }
-  
-  private static class EclipseHelper
-  {
-    public static Diagnostic toDiagnostic(Throwable throwable)
-    {
-      if (throwable instanceof org.eclipse.core.runtime.CoreException)
-      {
-        IStatus status = ((org.eclipse.core.runtime.CoreException)throwable).getStatus();
-        DiagnosticWrapper wrapperDiagnostic = new DiagnosticWrapper(status);
-        Throwable cause = throwable.getCause();
-        if (cause != null && cause != throwable)
-        {
-          wrapperDiagnostic.basicGetChildren().add(BasicDiagnostic.toDiagnostic(cause));
-        }
-        return wrapperDiagnostic;
-      }
-      return null;
-    }
   }
 }
