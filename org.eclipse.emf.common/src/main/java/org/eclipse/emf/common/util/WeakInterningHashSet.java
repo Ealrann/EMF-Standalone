@@ -20,7 +20,6 @@ import java.util.AbstractSet;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.WeakHashMap;
 
 /**
  * An implementation of an {@link InterningSet interning set} that keeps weak references to its element.

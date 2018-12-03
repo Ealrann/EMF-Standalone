@@ -12,7 +12,6 @@ package org.eclipse.emf.ecore.xml.type.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -23,16 +22,17 @@ import javax.xml.namespace.QName;
 
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
-
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
-
-import org.eclipse.emf.ecore.xml.type.*;
+import org.eclipse.emf.ecore.xml.type.AnyType;
+import org.eclipse.emf.ecore.xml.type.ProcessingInstruction;
+import org.eclipse.emf.ecore.xml.type.SimpleAnyType;
+import org.eclipse.emf.ecore.xml.type.XMLTypeDocumentRoot;
+import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 
 /**
  * <!-- begin-user-doc -->
