@@ -9,7 +9,6 @@ package org.eclipse.emf.common.util;
 
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
 import java.util.Locale;
 
 import org.eclipse.emf.common.CommonPlugin;

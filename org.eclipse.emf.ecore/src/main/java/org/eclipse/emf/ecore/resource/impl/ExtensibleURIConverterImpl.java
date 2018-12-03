@@ -408,23 +408,13 @@ public class ExtensibleURIConverterImpl implements URIConverter
     String scheme = result.scheme();
     if (scheme == null)
     {
-      if (PlatformResourceURIHandlerImpl.getWorkspaceRoot() != null)
+      if (result.hasAbsolutePath())
       {
-        if (result.hasAbsolutePath())
-        {
-          result = URI.createPlatformResourceURI(result.toString(), false);
-        }
+        result = URI.createURI("file:" + result);
       }
       else
       {
-        if (result.hasAbsolutePath())
-        {
-          result = URI.createURI("file:" + result);
-        }
-        else
-        {
-          result = URI.createFileURI(new File(result.toString()).getAbsolutePath());
-        }
+        result = URI.createFileURI(new File(result.toString()).getAbsolutePath());
       }
     }
 
