@@ -103,10 +103,10 @@ public class URIMappingRegistryImpl extends BasicEMap<URI, URI>
       {
         for (int i = Math.min(prefixMaps.size() - 1, uri.segmentCount()); i >= 0; --i)
         {
-          List<Entry<URI, URI>> prefixes = prefixMaps.get(i);
+          final List<Entry<URI, URI>> prefixes = prefixMaps.get(i);
           for (int j = prefixes.size() - 1; j >= 0; --j)
           {
-            Entry<URI, URI> entry = prefixes.get(j);
+            final Entry<URI, URI> entry = prefixes.get(j);
             result = uri.replacePrefix(entry.getKey(), entry.getValue());
 
             if (result != null)
@@ -140,8 +140,7 @@ public class URIMappingRegistryImpl extends BasicEMap<URI, URI>
   /**
    * A map that is a {@link ExtensibleURIConverterImpl.URIMap}.
    */
-  @SuppressWarnings("deprecation")
-  protected class URIMapImpl extends DelegatingMap implements URIConverterImpl.URIMap, ExtensibleURIConverterImpl.URIMap.Internal
+  protected class URIMapImpl extends DelegatingMap implements ExtensibleURIConverterImpl.URIMap, ExtensibleURIConverterImpl.URIMap.Internal
   {
     /**
      * Creates an instance.
@@ -157,7 +156,8 @@ public class URIMappingRegistryImpl extends BasicEMap<URI, URI>
      * @param uri the URI to remap.
      * @return the remapped URI, or the URI itself.
      */
-    public URI getURI(URI uri)
+    @Override
+	public URI getURI(URI uri)
     {
       return URIMappingRegistryImpl.this.getURI(uri);
     }
@@ -166,7 +166,8 @@ public class URIMappingRegistryImpl extends BasicEMap<URI, URI>
      * Delegates to the {@link URIMappingRegistryImpl#modificationCount()}.
      * @since 2.8
      */
-    public int modificationCount()
+    @Override
+	public int modificationCount()
     {
       return URIMappingRegistryImpl.this.modificationCount();
     }
@@ -216,7 +217,7 @@ public class URIMappingRegistryImpl extends BasicEMap<URI, URI>
   {
     if (((MappingEntryImpl)entry).isPrefixMapEntry)
     {
-      int length = entry.getKey().segmentCount();
+      final int length = entry.getKey().segmentCount();
       if (prefixMaps == null)
       {
         prefixMaps = new BasicEList<List<Entry<URI, URI>>>();
@@ -250,7 +251,7 @@ public class URIMappingRegistryImpl extends BasicEMap<URI, URI>
   {
     if (((MappingEntryImpl)entry).isPrefixMapEntry)
     {
-      int length = entry.getKey().segmentCount();
+      final int length = entry.getKey().segmentCount();
       prefixMaps.get(length).remove(entry);
     }
   }
