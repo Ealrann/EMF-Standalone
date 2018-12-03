@@ -12,8 +12,8 @@
 package org.eclipse.emf.ecore.impl;
 
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.util.AbstractSequentialList;
 import java.util.Collection;
 import java.util.HashMap;

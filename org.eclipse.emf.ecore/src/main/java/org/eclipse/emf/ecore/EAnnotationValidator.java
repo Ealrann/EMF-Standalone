@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.DiagnosticChain;
-import org.eclipse.emf.ecore.util.BasicEAnnotationValidator;
-import org.eclipse.emf.ecore.util.EObjectValidator;
 
 
 /**
@@ -68,7 +66,7 @@ public interface EAnnotationValidator
         Object eAnnotationValidator = super.get(key);
         if (eAnnotationValidator instanceof EAnnotationValidator.Descriptor)
         {
-          EAnnotationValidator.Descriptor eAnnotationValidatorDescriptor = (EAnnotationValidator.Descriptor)eAnnotationValidator;
+          final EAnnotationValidator.Descriptor eAnnotationValidatorDescriptor = (EAnnotationValidator.Descriptor)eAnnotationValidator;
           eAnnotationValidator = eAnnotationValidatorDescriptor.getEAnnotationValidator();
           put((String)key, eAnnotationValidator);
           return eAnnotationValidator;
@@ -79,7 +77,8 @@ public interface EAnnotationValidator
         }
       }
 
-      public EAnnotationValidator getEAnnotationValidator(String annotationSource)
+      @Override
+	public EAnnotationValidator getEAnnotationValidator(String annotationSource)
       {
         return (EAnnotationValidator)get(annotationSource);
       }
