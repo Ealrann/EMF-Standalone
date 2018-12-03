@@ -4,6 +4,7 @@ temp.folder
 *.jar
 build/
 .gradle
-.settings/
 .project
 .classpath
+.settings/
+
