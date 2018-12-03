@@ -75,8 +75,8 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 
 import javax.xml.datatype.DatatypeConstants;
-import javax.xml.datatype.Duration;
 import javax.xml.datatype.DatatypeConstants.Field;
+import javax.xml.datatype.Duration;
 
 import org.eclipse.emf.ecore.xml.type.util.XMLTypeUtil;
 

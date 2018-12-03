@@ -22,7 +22,6 @@ import java.util.WeakHashMap;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 
@@ -51,22 +50,6 @@ public class EPackageRegistryImpl extends HashMap<String, Object> implements EPa
         if (EcorePlugin.getDefaultRegistryImplementation() != null)
         {
           return EcorePlugin.getDefaultRegistryImplementation();
-        }
-        else if (!EMFPlugin.IS_OSGI_RUNNING)
-        {
-          try
-          {
-            SecurityManager securityManager = System.getSecurityManager();
-            if (securityManager != null)
-            {
-              securityManager.checkPermission(new RuntimePermission("classLoader"));
-            }
-            return new Delegator();
-          }
-          catch (Throwable throwable)
-          {
-            return new SecureDelegator();
-          }
         }
         else
         {
