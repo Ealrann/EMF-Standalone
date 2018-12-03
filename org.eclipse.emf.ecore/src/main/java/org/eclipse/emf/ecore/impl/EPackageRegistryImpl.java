@@ -22,7 +22,6 @@ import java.util.WeakHashMap;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 

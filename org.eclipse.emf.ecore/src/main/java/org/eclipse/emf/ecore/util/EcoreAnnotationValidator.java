@@ -248,7 +248,6 @@ public final class EcoreAnnotationValidator extends BasicEAnnotationValidator
           (EAttribute)ANNOTATION_PACKAGE_CLASS.getEStructuralFeature("invocationDelegates"),
           EOperation.Internal.InvocationDelegate.Factory.Registry.INSTANCE.keySet());
         VALID_KEYS.put((EAttribute)ANNOTATION_PACKAGE_CLASS.getEStructuralFeature("conversionDelegates"), EDataType.Internal.ConversionDelegate.Factory.Registry.INSTANCE.keySet());
-        VALID_KEYS.put((EAttribute)ANNOTATION_PACKAGE_CLASS.getEStructuralFeature("queryDelegates"), QueryDelegate.Factory.Registry.INSTANCE.keySet());
 
         ANNOTATION_CLASSIFIER_CLASS = (EClass)ePackage.getEClassifier("Classifier");
 
@@ -332,7 +331,6 @@ public final class EcoreAnnotationValidator extends BasicEAnnotationValidator
         validKeys.put(
           (EAttribute)ANNOTATION_PACKAGE_CLASS.getEStructuralFeature("conversionDelegates"),
           EDataType.Internal.ConversionDelegate.Factory.Registry.INSTANCE.getTargetPlatformFactories());
-        validKeys.put((EAttribute)ANNOTATION_PACKAGE_CLASS.getEStructuralFeature("queryDelegates"), QueryDelegate.Factory.Registry.INSTANCE.getTargetPlatformFactories());
 
         if (context != null)
         {

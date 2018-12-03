@@ -330,18 +330,6 @@ public class DateConversionDelegateFactory implements EDataType.Internal.Convers
           return new DateConversionDelegate(dateFormat);
         }
       }
-      else if (instanceClass == java.sql.Date.class)
-      {
-        if ("Long".equals(formatURI.authority()))
-        {
-          return SQLDateAsLongConversionDelegate.INSTANCE;
-        }
-        else
-        {
-          DateFormat dateFormat = getDateFormat(formatURI);
-          return new SQLDateConversionDelegate(dateFormat);
-        }
-      }
       else if (instanceClass == Calendar.class)
       {
         String calendarType = formatURI.query();
@@ -396,7 +384,7 @@ public class DateConversionDelegateFactory implements EDataType.Internal.Convers
         AnnotationValidator.INSTANCE.throwIllegalArgumentException(
           AnnotationValidator.INVALID_INSTANCE_TYPE,
           eDataType.getInstanceTypeName(),
-          Arrays.asList(new Object []{ long.class, Long.class, Date.class, java.sql.Date.class, Calendar.class, XMLGregorianCalendar.class }));
+          Arrays.asList(new Object []{ long.class, Long.class, Date.class, Calendar.class, XMLGregorianCalendar.class }));
       }
     }
 
@@ -1064,83 +1052,6 @@ public class DateConversionDelegateFactory implements EDataType.Internal.Convers
         {
           dateFormat.setTimeZone(GMT);
           return dateFormat.parse(literal);
-        }
-        catch (ParseException exception)
-        {
-          throw new IllegalArgumentException(exception);
-        }
-      }
-    }
-  }
-
-  private static class SQLDateAsLongConversionDelegate implements EDataType.Internal.ConversionDelegate
-  {
-    private static final SQLDateAsLongConversionDelegate INSTANCE = new SQLDateAsLongConversionDelegate();
-
-    private SQLDateAsLongConversionDelegate()
-    {
-    }
-
-    public String convertToString(Object value)
-    {
-      if (value == null)
-      {
-        return null;
-      }
-      else
-      {
-        return Long.toString(((Date)value).getTime());
-      }
-    }
-
-    public Object createFromString(String literal)
-    {
-      if (literal == null)
-      {
-        return null;
-      }
-      else
-      {
-        return new java.sql.Date(Long.parseLong(literal));
-      }
-    }
-  }
-
-  private static class SQLDateConversionDelegate implements EDataType.Internal.ConversionDelegate
-  {
-    private final DateFormat dateFormat;
-
-    public SQLDateConversionDelegate(DateFormat dateFormat)
-    {
-      this.dateFormat = dateFormat;
-    }
-
-    public synchronized String convertToString(Object value)
-    {
-      if (value == null)
-      {
-        return null;
-      }
-      else
-      {
-        dateFormat.setTimeZone(GMT);
-        return dateFormat.format(value);
-      }
-    }
-
-    public synchronized Object createFromString(String literal)
-    {
-      if (literal == null)
-      {
-        return null;
-      }
-      else
-      {
-        try
-        {
-          dateFormat.setTimeZone(GMT);
-          Date date = dateFormat.parse(literal);
-          return new java.sql.Date(date.getTime());
         }
         catch (ParseException exception)
         {

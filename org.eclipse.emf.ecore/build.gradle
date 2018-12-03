@@ -5,5 +5,5 @@ plugins {
 
 dependencies
 {
-	implementation project(':org.eclipse.emf.common')
+	api project(':org.eclipse.emf.common')
 }
