@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
-
 import javax.xml.namespace.QName;
 
 import org.eclipse.emf.ecore.EValidator;

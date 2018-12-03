@@ -12,7 +12,6 @@ package org.eclipse.emf.ecore.xml.type;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
 import java.util.List;
 
 import javax.xml.datatype.Duration;
