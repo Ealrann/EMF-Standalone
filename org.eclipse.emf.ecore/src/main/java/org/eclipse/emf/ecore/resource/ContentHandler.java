@@ -18,9 +18,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
-import org.eclipse.core.runtime.content.IContentDescriber;
-import org.eclipse.core.runtime.content.IContentDescription;
-import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ContentHandlerRegistryImpl;
 
@@ -240,18 +237,9 @@ public interface ContentHandler
       byte [] utf8Bytes;
       byte [] utf16BEBytes;
       byte [] utf16LEBytes;
-      try
-      {
-        utf8Bytes = org.eclipse.core.runtime.content.IContentDescription.BOM_UTF_8;
-        utf16BEBytes = org.eclipse.core.runtime.content.IContentDescription.BOM_UTF_16BE;
-        utf16LEBytes = org.eclipse.core.runtime.content.IContentDescription.BOM_UTF_16LE;
-      }
-      catch (Throwable throwable)
-      {
-        utf8Bytes = new byte [] {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
-        utf16BEBytes = new byte [] {(byte) 0xFE, (byte) 0xFF};
-        utf16LEBytes =  new byte [] {(byte) 0xFF, (byte) 0xFE};
-      }
+      utf8Bytes = new byte [] {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
+      utf16BEBytes = new byte [] {(byte) 0xFE, (byte) 0xFF};
+      utf16LEBytes =  new byte [] {(byte) 0xFF, (byte) 0xFE};
       UTF_8_BYTES = utf8Bytes;
       UTF_16BE_BYTES = utf16BEBytes;
       UTF_16LE_BYTES = utf16LEBytes;

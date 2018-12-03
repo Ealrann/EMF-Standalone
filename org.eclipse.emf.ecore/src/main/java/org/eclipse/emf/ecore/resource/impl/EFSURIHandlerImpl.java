@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -70,12 +69,12 @@ public class EFSURIHandlerImpl extends URIHandlerImpl
         efsGetStoreMethod = efsClass.getMethod("getStore", java.net.URI.class);
         efsGetFileSystemMethod = efsClass.getMethod("getFileSystem", String.class);
         Class <?> fileStoreClass = efsGetStoreMethod.getReturnType();
-        fileStoreOpenInputStreamMethod = fileStoreClass.getMethod("openInputStream", Integer.TYPE, IProgressMonitor.class);
-        fileStoreOpenOutputStreamMethod = fileStoreClass.getMethod("openOutputStream", Integer.TYPE, IProgressMonitor.class);
-        fileStoreDeleteMethod = fileStoreClass.getMethod("delete", Integer.TYPE, IProgressMonitor.class);
+        fileStoreOpenInputStreamMethod = fileStoreClass.getMethod("openInputStream", Integer.TYPE, null);
+        fileStoreOpenOutputStreamMethod = fileStoreClass.getMethod("openOutputStream", Integer.TYPE, null);
+        fileStoreDeleteMethod = fileStoreClass.getMethod("delete", Integer.TYPE, null);
         fileStoreFetchInfoMethod = fileStoreClass.getMethod("fetchInfo");
         Class <?> fileInfoClass = fileStoreFetchInfoMethod.getReturnType();
-        fileStorePutInfoMethod = fileStoreClass.getMethod("putInfo", fileInfoClass, Integer.TYPE, IProgressMonitor.class);
+        fileStorePutInfoMethod = fileStoreClass.getMethod("putInfo", fileInfoClass, Integer.TYPE, null);
         fileInfoExistsMethod = fileInfoClass.getMethod("exists");
         fileInfoIsDirectoryMethod = fileInfoClass.getMethod("isDirectory");
         fileInfoGetLengthMethod = fileInfoClass.getMethod("getLength");
