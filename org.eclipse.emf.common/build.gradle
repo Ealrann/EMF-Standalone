@@ -1,0 +1,19 @@
+plugins {
+	id 'java-library'
+}
+
+dependencies
+{
+}
+
+eclipse {
+  jdt {
+	file {
+      withProperties { properties ->
+        // set properties for the file org.eclipse.jdt.core.prefs
+        properties['org.eclipse.jdt.core.compiler.problem.missingOverrideAnnotation'] = 'ignore'
+		properties['org.eclipse.jdt.core.compiler.problem.uncheckedTypeOperation'] = 'ignore'
+      }
+	}
+  }
+}

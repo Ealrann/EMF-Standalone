@@ -1,0 +1,21 @@
+plugins {
+	id 'java-library'
+}
+
+dependencies
+{
+	implementation project(':org.eclipse.emf.common')
+	implementation project(':org.eclipse.emf.ecore')
+}
+
+eclipse {
+  jdt {
+	file {
+      withProperties { properties ->
+        // set properties for the file org.eclipse.jdt.core.prefs
+        properties['org.eclipse.jdt.core.compiler.problem.missingOverrideAnnotation'] = 'ignore'
+		properties['org.eclipse.jdt.core.compiler.problem.uncheckedTypeOperation'] = 'ignore'
+      }
+	}
+  }
+}
