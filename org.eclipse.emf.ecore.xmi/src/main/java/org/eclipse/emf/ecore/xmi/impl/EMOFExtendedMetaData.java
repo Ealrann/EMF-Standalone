@@ -12,11 +12,9 @@ package org.eclipse.emf.ecore.xmi.impl;
 
 import java.util.HashMap;
 
-import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
@@ -100,10 +98,10 @@ public class EMOFExtendedMetaData extends BasicExtendedMetaData
   @Override
   public String getName(EClassifier eClassifier)
   {
-    XMLResource.XMLInfo info = xmlMap.getInfo(eClassifier);
+    final XMLResource.XMLInfo info = xmlMap.getInfo(eClassifier);
     if (info != null)
     {
-      String name = info.getName();
+      final String name = info.getName();
       if (name != null)
       {
         return info.getName();
@@ -115,10 +113,10 @@ public class EMOFExtendedMetaData extends BasicExtendedMetaData
   @Override
   public String getName(EStructuralFeature eStructuralFeature)
   {
-    XMLResource.XMLInfo info = xmlMap.getInfo(eStructuralFeature);
+    final XMLResource.XMLInfo info = xmlMap.getInfo(eStructuralFeature);
     if (info != null)
     {
-      String name = info.getName();
+      final String name = info.getName();
       if (name != null)
       {
         return info.getName();
@@ -141,7 +139,7 @@ public class EMOFExtendedMetaData extends BasicExtendedMetaData
   @Override
   public int getFeatureKind(EStructuralFeature feature)
   {
-    XMLResource.XMLInfo info = xmlMap.getInfo(feature);
+    final XMLResource.XMLInfo info = xmlMap.getInfo(feature);
     if (info != null)
     {
       switch (info.getXMLRepresentation())
