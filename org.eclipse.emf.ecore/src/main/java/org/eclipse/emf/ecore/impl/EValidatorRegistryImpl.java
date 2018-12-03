@@ -15,7 +15,6 @@ import java.util.HashMap;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EValidator;
-
 import org.eclipse.emf.ecore.util.EObjectValidator;
 
 
