@@ -1,0 +1,8 @@
+plugins {
+	id 'java-library'
+}
+
+dependencies
+{
+	implementation project(':org.eclipse.emf.common')
+}
