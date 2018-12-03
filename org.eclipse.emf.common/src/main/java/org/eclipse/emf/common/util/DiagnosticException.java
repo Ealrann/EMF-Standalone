@@ -10,8 +10,6 @@
  */
 package org.eclipse.emf.common.util;
 
-import org.eclipse.core.runtime.CoreException;
-
 /**
  * A checked exception representing a diagnosed failure.
  * <p>
@@ -34,10 +32,5 @@ public class DiagnosticException extends Exception
   public final Diagnostic getDiagnostic() 
   {
     return diagnostic;
-  }
-  
-  public static CoreException toCoreException(DiagnosticException exception)
-  {
-    return new CoreException(BasicDiagnostic.toIStatus(exception));
   }
 }

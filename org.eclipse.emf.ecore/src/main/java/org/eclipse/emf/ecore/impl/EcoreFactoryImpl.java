@@ -19,10 +19,22 @@ import java.util.Date;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.WrappedException;
-import org.eclipse.emf.ecore.*;
-
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EEnumLiteral;
+import org.eclipse.emf.ecore.EFactory;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EParameter;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypeParameter;
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 //import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;

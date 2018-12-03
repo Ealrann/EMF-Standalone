@@ -13,29 +13,13 @@ package org.eclipse.emf.common;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.MessageFormat;
-import java.util.MissingResourceException;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 import java.util.jar.Manifest;
 
-import org.eclipse.core.runtime.ILog;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Plugin;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.DelegatingResourceLocator;
 import org.eclipse.emf.common.util.Logger;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.common.util.WrappedException;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkUtil;
 
 
 /**
@@ -57,57 +41,9 @@ import org.osgi.framework.FrameworkUtil;
  */
 public abstract class EMFPlugin extends DelegatingResourceLocator implements ResourceLocator, Logger
 {
-  /**
-   * @since 2.27
-   */
-  public static final boolean IS_OSGI_RUNNING;
-  static
-  {
-    boolean result = false;
-    try
-    {
-      result = FrameworkUtil.getBundle(EMFPlugin.class) != null;
-    }
-    catch (Throwable exception)
-    {
-      // Assume that we aren't running.
-    }
-    IS_OSGI_RUNNING = result;
-  }
+  public static final boolean IS_ECLIPSE_RUNNING = false;
 
-  public static final boolean IS_ECLIPSE_RUNNING;
-  static
-  {
-    boolean result = false;
-    try
-    {
-      result = Platform.isRunning();
-    }
-    catch (Throwable exception)
-    {
-      // Assume that we aren't running.
-    }
-    IS_ECLIPSE_RUNNING = result;
-  }
-
-  public static final boolean IS_RESOURCES_BUNDLE_AVAILABLE;
-  static
-  {
-    boolean result = false;
-    if (IS_ECLIPSE_RUNNING)
-    {
-      try
-      {
-        Bundle resourcesBundle = Platform.getBundle("org.eclipse.core.resources");
-        result = resourcesBundle != null && (resourcesBundle.getState() & (Bundle.ACTIVE | Bundle.STARTING | Bundle.RESOLVED)) != 0;
-      }
-      catch (Throwable exception)
-      {
-        // Assume that it's not available.
-      }
-    }
-    IS_RESOURCES_BUNDLE_AVAILABLE = result;
-  }
+  public static final boolean IS_RESOURCES_BUNDLE_AVAILABLE = false;
 
   protected ResourceLocator [] delegateResourceLocators;
 
@@ -116,16 +52,10 @@ public abstract class EMFPlugin extends DelegatingResourceLocator implements Res
     this.delegateResourceLocators = delegateResourceLocators;
   }
 
-  /**
-   * Returns an Eclipse plugin implementation of a resource locator.
-   * @return an Eclipse plugin implementation of a resource locator.
-   */
-  public abstract ResourceLocator getPluginResourceLocator();
-  
   @Override
   final protected ResourceLocator getPrimaryResourceLocator()
   {
-    return getPluginResourceLocator();
+    return null;
   }
   
   @Override
@@ -134,27 +64,10 @@ public abstract class EMFPlugin extends DelegatingResourceLocator implements Res
     return delegateResourceLocators;
   }
 
-  /**
-   * Returns an Eclipse plugin implementation of a logger.
-   * @return an Eclipse plugin implementation of a logger.
-   */
-  public Logger getPluginLogger()
-  {
-    return (Logger)getPluginResourceLocator();
-  }
-
   public String getSymbolicName()
   {
-    ResourceLocator resourceLocator = getPluginResourceLocator();
-    if (resourceLocator instanceof InternalEclipsePlugin)
-    {
-      return ((InternalEclipsePlugin)resourceLocator).getSymbolicName();
-    }
-    else
-    {
-      String result = getClass().getName();
-      return result.substring(0, result.lastIndexOf('.'));
-    }
+    String result = getClass().getName();
+    return result.substring(0, result.lastIndexOf('.'));
   }
 
   /*
@@ -162,168 +75,13 @@ public abstract class EMFPlugin extends DelegatingResourceLocator implements Res
    */
   public void log(Object logEntry)
   {
-    Logger logger = getPluginLogger();
-    if (logger == null)
+    if (logEntry instanceof Throwable)
     {
-      if (logEntry instanceof Throwable)
-      {
-        ((Throwable)logEntry).printStackTrace(System.err);
-      }
-      else
-      {
-        System.err.println(logEntry);
-      }
+      ((Throwable)logEntry).printStackTrace(System.err);
     }
     else
     {
-      logger.log(logEntry);
-    }
-  }
-
-  /**
-   * This is just a bundle activator wrapper for delegating to another bundle activator.
-   * It provides a {@link #createBundle() create} method for creating the delegate.
-   * Any exception thrown during creation of the delegate is ignored,
-   * in which case this activator does nothing for {@link #start(BundleContext) start} and {@link #stop(BundleContext) stop}.
-   * The idea is to provide a bundle activator that can delegate to an Equinox-dependent bundle activator,
-   * but behaves gracefully in a non-Equinox OSGi implementation.
-   * 
-   * @since 2.10
-   */
-  public static abstract class OSGiDelegatingBundleActivator implements BundleActivator
-  {
-    private final BundleActivator bundle;
-
-    public OSGiDelegatingBundleActivator()
-    {
-      bundle = createBundleHelper();
-    }
-
-    private BundleActivator createBundleHelper()
-    {
-      try
-      {
-        return createBundle();
-      }
-      catch (Throwable throwable)
-      {
-        return null;
-      }
-    }
-
-    protected abstract BundleActivator createBundle();
-
-    public final void start(BundleContext context) throws Exception
-    {
-      if (bundle != null)
-      {
-        bundle.start(context);
-      }
-    }
-
-    public final void stop(BundleContext context) throws Exception
-    {
-      if (bundle != null)
-      {
-        bundle.stop(context);
-      }
-    }
-  }
-
-  /**
-   * The actual implementation of an Eclipse <b>Plugin</b>.
-   */
-  public static abstract class EclipsePlugin extends Plugin implements ResourceLocator, Logger, InternalEclipsePlugin
-  {
-    /**
-     * The EMF plug-in APIs are all delegated to this helper, so that code can be shared by plug-in
-     * implementations with a different platform base class (e.g. AbstractUIPlugin).
-     */
-    protected InternalHelper helper;
-    
-    /**
-     * Creates an instance.
-     */
-    public EclipsePlugin()
-    {
-      super();
-      helper = new InternalHelper(this);
-    }
-
-    /**
-     * Return the plugin ID.
-     */
-    public String getSymbolicName()
-    {
-      return helper.getSymbolicName();
-    }
-
-    /*
-     * Javadoc copied from interface.
-     */
-    public URL getBaseURL()
-    {
-      return helper.getBaseURL();
-    }
-
-    /*
-     * Javadoc copied from interface.
-     */
-    public Object getImage(String key)
-    {
-      try
-      {
-        return doGetImage(key);
-      }
-      catch (MalformedURLException exception)
-      {
-        throw new WrappedException(exception);
-      }
-      catch (IOException exception)
-      {
-        throw 
-          new MissingResourceException
-            (CommonPlugin.INSTANCE.getString("_UI_StringResourceNotFound_exception", new Object [] { key }),
-             getClass().getName(), 
-             key);
-      }
-    }
-
-    /**
-     * Does the work of fetching the image associated with the key.
-     * It ensures that the image exists.
-     * @param key the key of the image to fetch.
-     * @exception IOException if an image doesn't exist.
-     * @return the description of the image associated with the key.
-     */
-    protected Object doGetImage(String key) throws IOException
-    {
-      return helper.getImage(key);
-    }
-
-    public String getString(String key)
-    {
-      return helper.getString(key, true);
-    }
-    
-    public String getString(String key, boolean translate)
-    {
-      return helper.getString(key, translate);
-    }
-
-    public String getString(String key, Object [] substitutions)
-    {
-      return helper.getString(key, substitutions, true);
-    }
-
-    public String getString(String key, Object [] substitutions, boolean translate)
-    {
-      return helper.getString(key, substitutions, translate);
-    }
-
-    public void log(Object logEntry)
-    {
-      helper.log(logEntry);
+      System.err.println(logEntry);
     }
   }
 
@@ -334,141 +92,6 @@ public abstract class EMFPlugin extends DelegatingResourceLocator implements Res
   public static interface InternalEclipsePlugin
   {
     String getSymbolicName();
-  }
-  
-  /**
-   * This just provides a common delegate for non-UI and UI plug-in classes.
-   * It is not considered API and should not be used by clients.
-   */
-  public static class InternalHelper
-  {
-    protected Plugin plugin;
-    protected ResourceBundle resourceBundle;
-    protected ResourceBundle untranslatedResourceBundle;
-
-    public InternalHelper(Plugin plugin)
-    {
-      this.plugin = plugin;
-    }
-
-    protected Bundle getBundle()
-    {
-      return plugin.getBundle();
-    }
-
-    protected ILog getLog()
-    {
-      return plugin.getLog();
-    }
-    
-    /**
-     * Return the plugin ID.
-     */
-    public String getSymbolicName()
-    {
-      return getBundle().getSymbolicName();
-    }
-
-    public URL getBaseURL()
-    {
-      return getBundle().getEntry("/");
-    }
-
-    /**
-     * Fetches the image associated with the given key. It ensures that the image exists.
-     * @param key the key of the image to fetch.
-     * @exception IOException if an image doesn't exist.
-     * @return the description of the image associated with the key.
-     */
-    public Object getImage(String key) throws IOException
-    {
-      URL url = new URL(getBaseURL() + "icons/" + key + extensionFor(key));
-      InputStream inputStream = url.openStream(); 
-      inputStream.close();
-      return url;
-    }
-
-    public String getString(String key, boolean translate)
-    {
-      ResourceBundle bundle = translate ? resourceBundle : untranslatedResourceBundle;
-      if (bundle == null)
-      {
-        if (translate)
-        {
-           bundle = resourceBundle = Platform.getResourceBundle(getBundle());
-        }
-        else
-        {
-          String bundleLocalization = (String)getBundle().getHeaders().get(Constants.BUNDLE_LOCALIZATION);
-          String propertiesPath = bundleLocalization != null ? bundleLocalization + ".properties" : "plugin.properties";
-          String resourceName = getBaseURL().toString() + propertiesPath;
-          try
-          {
-            InputStream inputStream =  new URL(resourceName).openStream();
-            bundle = untranslatedResourceBundle = new PropertyResourceBundle(inputStream);
-            inputStream.close();
-          }
-          catch (IOException ioException)
-          {
-            throw new MissingResourceException("Missing properties: " + resourceName, getClass().getName(), propertiesPath);
-          }
-        }
-      }
-      return bundle.getString(key);
-    }
-
-    public String getString(String key, Object [] substitutions, boolean translate)
-    {
-      return MessageFormat.format(getString(key, translate), substitutions);
-    }
-
-    public void log(Object logEntry)
-    {
-      IStatus status;
-      if (logEntry instanceof IStatus)
-      {
-        status = (IStatus)logEntry;
-        getLog().log(status);
-      }
-      else 
-      {
-        if (logEntry == null)
-        {
-          logEntry = new RuntimeException(getString("_UI_NullLogEntry_exception", true)).fillInStackTrace();
-        }
-
-        if (logEntry instanceof Throwable)
-        {
-          Throwable throwable = (Throwable)logEntry;
-
-          // System.err.println("Logged throwable: --------------------");
-          // throwable.printStackTrace();
-
-          String message = throwable.getLocalizedMessage();
-          if (message == null)
-          {
-            Throwable cause = throwable.getCause();
-            if (cause != null)
-            {
-              message = cause.getLocalizedMessage();
-            }
-            if (message == null)
-            {
-              message = "";
-            }
-          }
-
-          getLog().log(new Status(IStatus.WARNING, getBundle().getSymbolicName(), 0, message, throwable));
-        }
-        else
-        {
-          // System.err.println("Logged throwable: --------------------");
-          // throwable.printStackTrace();
-
-          getLog().log (new Status (IStatus.WARNING, getBundle().getSymbolicName(), 0, logEntry.toString(), null));
-        }
-      }
-    } 
   }
 
   public static void main(String[] args)

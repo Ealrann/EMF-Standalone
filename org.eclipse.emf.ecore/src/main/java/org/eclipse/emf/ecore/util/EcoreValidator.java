@@ -14,7 +14,6 @@ package org.eclipse.emf.ecore.util;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -35,13 +34,31 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.UniqueEList;
-
-import org.eclipse.emf.ecore.*;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EAnnotationValidator;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EEnumLiteral;
+import org.eclipse.emf.ecore.EFactory;
+import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EModelElement;
+import org.eclipse.emf.ecore.ENamedElement;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EParameter;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypeParameter;
+import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-
 import org.eclipse.emf.ecore.xml.namespace.XMLNamespacePackage;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.emf.ecore.xml.type.util.XMLTypeValidator;

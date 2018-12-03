@@ -18,9 +18,6 @@ import java.util.ListIterator;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.ETypedElement;
 
 
 /**

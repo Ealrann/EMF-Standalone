@@ -20,7 +20,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.ContentHandler;
-import org.eclipse.emf.ecore.resource.impl.ContentHandlerImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xml.type.XMLTypeDocumentRoot;
@@ -304,21 +303,6 @@ public class RootXMLContentHandlerImpl extends XMLContentHandlerImpl
     else
     {
       return namespace == null ? rootElementNamespace == null : namespace.equals(rootElementNamespace);
-    }
-  }
-
-  /**
-   * A describer that {@link #createContentHandler(Map) creates} a {@link RootXMLContentHandlerImpl} instance.
-   */
-  public static class Describer extends ContentHandlerImpl.Describer
-  {
-    /**
-     * Creates a {@link RootXMLContentHandlerImpl} instance.
-     */
-    @Override
-    protected ContentHandler createContentHandler(Map<String, String> parameters)
-    {
-      return new RootXMLContentHandlerImpl(parameters);
     }
   }
 }

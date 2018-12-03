@@ -460,7 +460,7 @@ public class StringSegment extends BasicEList<StringSegment.Element>
 
   }
 
-  protected static class Element
+  public static class Element
   {
     int size;
 
