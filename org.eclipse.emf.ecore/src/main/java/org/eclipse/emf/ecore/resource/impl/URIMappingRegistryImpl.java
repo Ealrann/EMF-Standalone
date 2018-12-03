@@ -141,7 +141,7 @@ public class URIMappingRegistryImpl extends BasicEMap<URI, URI>
    * A map that is a {@link ExtensibleURIConverterImpl.URIMap}.
    */
   @SuppressWarnings("deprecation")
-  protected class URIMapImpl extends DelegatingMap implements URIConverterImpl.URIMap, ExtensibleURIConverterImpl.URIMap.Internal
+  protected class URIMapImpl extends DelegatingMap implements ExtensibleURIConverterImpl.URIMap, ExtensibleURIConverterImpl.URIMap.Internal
   {
     /**
      * Creates an instance.
