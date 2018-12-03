@@ -10,6 +10,14 @@ buildscript {
 	}
 }
 
+plugins {
+	// id 'org.javamodularity.moduleplugin' version '1.2.1'
+	id 'java'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
 repositories {
 	mavenLocal()
 	mavenCentral()
