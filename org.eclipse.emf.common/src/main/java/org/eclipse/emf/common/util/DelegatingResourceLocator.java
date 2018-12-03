@@ -25,8 +25,6 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import org.eclipse.emf.common.CommonPlugin;
-import org.eclipse.emf.common.util.ResourceLocator;
-import org.eclipse.emf.common.util.WrappedException;
 
 
 /**
