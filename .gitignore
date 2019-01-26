@@ -1,0 +1,9 @@
+bin
+build.xml
+temp.folder
+*.jar
+build/
+.gradle
+.settings/
+.project
+.classpath
